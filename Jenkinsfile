@@ -176,6 +176,22 @@ pipeline {
       steps {
         echo 'Running Unit Tests on vote app2'
         dir(path: 'vote') {
+          sh 'pip install -r requirements.txt'
+          sh 'nosetests -v'
+        }
+
+      }
+    }
+    stage('vote-integration') {
+      agent any
+      when {
+        changeset '**/vote/**'
+        branch 'master'
+      }
+      steps {
+        echo 'Running integration Tests on vote app'
+        dir(path: 'vote') {
+          sh 'sh integration_test.sh'
           sh 'nosetests -v'
         }
 
